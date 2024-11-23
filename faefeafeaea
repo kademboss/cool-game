@@ -1,0 +1,234 @@
+getgenv().Info = {
+    Integer = {
+        --// WalkSpeed
+        ["DefaultWalkSpeed"] = 16;
+        ["HookedWalkSpeed"] = 50;
+
+        --// JumpPower
+        ["DefaultJumpPower"] = 50;
+        ["HookedJumpPower"] = 100;
+
+        --// Fly
+        ["FlySpeed"] = 1;
+
+        --// Infinite Dash
+        ["InfiniteDashDelay"] = 0.5;
+        ["InfiniteDashPower"] = 50;
+
+        --// Anti Time-Stop
+        ["AntiTimeStopDelay"] = 0.8;
+
+        --// Auto SBR
+        ["Stage1TPDelay"] = 1;
+        ["Stage2TPDelay"] = 1;
+        ["Stage3TPDelay"] = 1;
+        ["Stage4TPDelay"] = 1;
+        ["LastStageTPDelay"] = 1;
+        ["AllStageHideDelay"] = 0;
+        ["WinHideDelay"] = 3;
+    };
+    String = {};
+    State = {
+        ["WalkSpeed"] = false;
+        ["JumpPower"] = false;
+        ["FlyToggle"] = false;
+        ["AutoSprint"] = false;
+        ["AntiVampBurn"] = false;
+        ["AntiRockTrap"] = false;
+        ["AntiTS"] = false;
+    };
+    Table = {
+        ["AllMods"] = {"UzuKee", "BLOODTARO", "Dxscape", "Myst_Ari", "eurycIea", "v_cks", "ezguap", "Tsuzutou", "ReferToWithered", "Illus0", "Pyreiz", "VoidedFlame", "ROUXABOUT", "mixeriiiiiing", "MichDrajo", "hayst4", "ElmoNYC", "Core_CorruptionF", "Brillcake", "AxionTheRevenant", "sammyj0n", "ViveLesPatat", "Zimvasion", "vertiify", "redfoxP", "cakesucker05", "00kamiMio", "itscanii", "SirDeviloper", "0nkka", "Ramdharam", "Olliebutheskenny", "cswag_code", "TwoGio", "KoleRTX2", "Wilpuri", "remendyy", "SpaceNuggies", "CrimsonBeheIit", "warycoolio"};
+        ["AllTeleports"] = {
+            ["Newbie Giorno"] = CFrame.new(1, 0, -697);
+            ["Train Station Side 1"] = CFrame.new(-214, 0, 18);
+            ["Train Station Side 2"] = CFrame.new(-265, -30, -447);
+            ["Pizza Place"] = CFrame.new(113, 6, 71);
+            ["The Arcade"] = CFrame.new(255, 5, -239);
+            ["The Cafe"] = CFrame.new(-544, -25, -174);
+            ["Diavolo"] = CFrame.new(1126, 116, -129);
+            ["Dio P3"] = CFrame.new(-44, 0, -973);
+            ["Jotaro P3"] = CFrame.new(182, -25, 578);
+            ["Jotaro P6"] = CFrame.new(784, -42, 144);
+            ["Tallest Peak"] = CFrame.new(-237, 284, 305);
+            ["Hamon Merchant"] = CFrame.new(421, 8, -287);
+            ["Boxing Merchant"] = CFrame.new(281, 0, 101);
+            ["Pluck Merchant"] = CFrame.new(125, -27, 438);
+            ["Heaven Dimension"] = CFrame.new(8553, -479, 8154);
+            ["Arrowsmith"] = CFrame.new(-667, 16, -299);
+            ["Cosmetics Merchants"] = CFrame.new(512, 2, 22);
+            ["Leaky Eye Luca"] = CFrame.new(-382, 0, -711);
+            ["Chad"] = CFrame.new(-121, -24, 524);
+            ["Brad the Bat Merchant"] = CFrame.new(-14, -0, -286);
+            ["Dracula"] = CFrame.new(-420, -34, -75);
+            ["Kars"] = CFrame.new(264, -33, 112);
+            ["Homeless Man Jill"] = CFrame.new(-142, -31, -577);
+            ["Vampire Room"] = CFrame.new(391, -31, -166);
+            ["Enrico Pucci"] = CFrame.new(917, 34, -17);
+            ["Safe Spot"] = CFrame.new(-452, -20, 206);
+        };
+    };
+    Keybinds = {
+        ["ToggleUI"] = Enum.KeyCode.RightShift;
+        ["ToggleFly"] = Enum.KeyCode.RightControl;
+    };
+}
+
+--// Services (Protected) (not actually detected yet but just for in case in future)
+local Players = cloneref(game:GetService("Players"))
+local RunService = cloneref(game:GetService("RunService"))
+local UserInputService = cloneref(game:GetService("UserInputService"))
+local HttpService = cloneref(game:GetService("HttpService"))
+local StarterGui = cloneref(game:GetService("StarterGui"))
+local CoreGui = cloneref(game:GetService("CoreGui"))
+local VirtualUser = cloneref(game:GetService("VirtualUser"))
+local TeleportService = cloneref(game:GetService("TeleportService"))
+local ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"))
+local PhysicsService = cloneref(game:GetService("PhysicsService"))
+local TweenService = cloneref(game:GetService("TweenService"))
+local Lighting = cloneref(game:GetService("Lighting"))
+local CollectionService = cloneref(game:GetService("CollectionService"))
+
+--// Variables
+local Player = Players.LocalPlayer
+local PlayerGui = Player.PlayerGui
+local Character = Player.Character or Player.CharacterAdded:Wait()
+
+--// Functions
+local kadem_IsSBR = function()
+    if game.PlaceId == 4643697430 then
+        return true
+    end
+    
+    return false
+end
+
+local kadem_GetHRP = function()
+	if Character:FindFirstChild("HumanoidRootPart") == nil then
+		repeat
+            task.wait()
+        until Character:FindFirstChild("HumanoidRootPart") ~= nil
+    end
+	
+    return Character:FindFirstChild("HumanoidRootPart")
+end
+
+local kadem_GetCFrame = function()
+	return kadem_GetHRP.CFrame
+end
+
+local kadem_GetHumanoid = function()
+	if Character:FindFirstChild("Humanoid") == nil then
+		repeat
+            task.wait()
+        until Character:FindFirstChild("Humanoid") ~= nil
+    end
+	
+    return Character:FindFirstChild("Humanoid")
+end
+
+local kadem_GetRemoteEvent = function()
+	if Character:FindFirstChild("RemoteEvent") == nil then
+		repeat
+            task.wait()
+        until Character:FindFirstChild("RemoteEvent") ~= nil
+    end
+
+	return Character:FindFirstChild("RemoteEvent")
+end
+
+local kadem_GetRemoteFunction = function()
+	if Character:FindFirstChild("RemoteFunction") == nil then
+		repeat
+            task.wait()
+        until Character:FindFirstChild("RemoteFunction") ~= nil
+    end
+	
+    return Character:FindFirstChild("RemoteFunction")
+end
+
+local kadem_Fly = function()
+    local Keys_Pressed = {
+        ["W"] = 0;
+        ["A"] = 0;
+        ["S"] = 0;
+        ["D"] = 0;
+    }
+    
+    local Key_Info = {
+        ["W"] = {
+            ["Operator"] = "+";
+            ["Direction"] = "LookVector";
+        };
+        ["A"] = {
+            ["Operator"] = "-";
+            ["Direction"] = "RightVector";
+        };
+        ["S"] = {
+            ["Operator"] = "-";
+            ["Direction"] = "LookVector";
+        };
+        ["D"] = {
+            ["Operator"] = "+";
+            ["Direction"] = "RightVector";
+        };
+    }
+
+    local function GetKeyFromEnum(enum)
+        return enum.KeyCode.Name
+    end
+    
+    local function GetMass(Model)
+        local Mass = 0
+        for _, Part in Model:GetDescendants() do
+            if Part:IsA("BasePart") then
+                Mass = Mass + Part:GetMass()
+            end
+        end
+
+        return Mass
+    end
+    
+    local function Math(Operator, A, B)
+        if Operator == "-" then
+            return A-B
+        elseif Operator == "+" then
+            return A+B
+        end
+    end
+
+    UserInputService.InputBegan:Connect(function(Key, Typing)
+        if Typing then return end
+        
+        local Key_String = GetKeyFromEnum(Key)
+        if Keys_Pressed[Key_String] then
+            Keys_Pressed[Key_String] = 1
+        end
+    end)
+    
+    UserInputService.InputEnded:Connect(function(Key, Typing)
+        if Typing then return end
+        
+        local Key_String = GetKeyFromEnum(Key)
+        if Keys_Pressed[Key_String] then
+            Keys_Pressed[Key_String] = 0
+        end
+    end)
+
+    RunService.RenderStepped:Connect(function()
+        local Mass = GetMass(Character)
+        local Mass_Vector = kadem_GetHRP().Position
+        local Direction_Vector = Vector3.zero
+        local Speed = Info.Integer.FlySpeed
+        
+        for Key, Data in pairs(Key_Info) do
+            local Direction = Data.Direction
+            local Operator = Data.Operator
+            if Keys_Pressed[Key] == 1 then
+                Direction_Vector = Direction_Vector + kadem_GetHRP()[Direction] * Math(Operator, Speed, Mass)
+            end
+        end
+        
+        kadem_GetHRP().Velocity = Direction_Vector
+    end)
+end
